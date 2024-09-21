@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using CodeBase.GamePlay.Levels;
 using CodeBase.Services.InputService;
 using UnityEngine;
 using Zenject;
@@ -7,90 +9,55 @@ namespace CodeBase.GamePlay.Player
 {
     public class PlayerMovement : MonoBehaviour
     {
-        [SerializeField] private float forwardSpeed = 5f; // Скорость движения вперед
-        [SerializeField] private float moveSpeed = 10f; // Скорость горизонтального движения
-        [SerializeField] private float laneLimit = 2f;
-        [SerializeField] private float turnSpeed = 2f; 
-        
-        private IInputService _inputService;
-        private Vector3 _targetPosition;
-        private float _initialX;
+        public float speed = 5f; // Скорость движения вперед
+        public float rotationSpeed = 180f; // Скорость поворота
+        private int _currentPointIndex = 0; // Текущая точка, к которой движется игрок
 
-        [Inject]
-        private void Construct(IInputService inputService)
-        {
-            _inputService = inputService;
-        }
+        private List<PivotPoint> _pivotPoints; // Список точек, по которым будет двигаться игрок
 
-        private void Start()
+        public void Initialize(List<PivotPoint> pivotPoints)
         {
-            _initialX = transform.position.x;
-            _targetPosition = transform.position; // Инициализируем начальную позицию
-            _inputService.OnDrag += HandleDrag;
+            _pivotPoints = pivotPoints;
         }
 
         private void Update()
         {
-            _inputService.Update();
+            if (_pivotPoints == null || _pivotPoints.Count == 0 || _currentPointIndex >= _pivotPoints.Count)
+                return;
 
-            // Движение вперед
-            transform.Translate(Vector3.forward * forwardSpeed * Time.deltaTime);
-
-            // Обновляем позицию по X
-            Vector3 currentPosition = transform.position;
-            currentPosition.x = Mathf.Lerp(currentPosition.x, _targetPosition.x, moveSpeed * Time.deltaTime);
-            transform.position = currentPosition;
+            MoveTowardsPoint();
         }
 
-        private void HandleDrag(float deltaX)
+        private void MoveTowardsPoint()
         {
-            float minX = _initialX - laneLimit; // Минимальная граница
-            float maxX = _initialX + laneLimit; // Максимальная граница
+            // Берем текущую точку назначения
+            Transform targetPoint = _pivotPoints[_currentPointIndex].transform;
 
-            // Измените только x-координату на основе deltaX
-            float newX = Mathf.Clamp(transform.position.x + deltaX * 0.1f, minX, maxX);
-            _targetPosition = new Vector3(newX, transform.position.y, transform.position.z);
+            // Двигаем игрока к точке
+            Vector3 direction = (targetPoint.position - transform.position).normalized;
+            transform.position += direction * speed * Time.deltaTime;
 
-            Debug.Log($"Current X: {transform.position.x}, New target X: {newX}");
-        }
-        
-        public void TurnTowards(float angle)
-        {
-            Quaternion targetRotation = Quaternion.Euler(0, angle, 0) * transform.rotation;
+            // Вращаем игрока в сторону точки
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
-            // Обновляем начальную позицию после поворота
-            _initialX = transform.position.x;
-
-            StartCoroutine(RotateToTarget(targetRotation));
-        }
-        
-        private IEnumerator RotateToTarget(Quaternion targetRotation)
-        {
-            float elapsedTime = 0f;
-            float duration = 0.5f; // Задайте длительность поворота
-
-            while (elapsedTime < duration)
+            // Проверяем, достиг ли игрок точки
+            if (Vector3.Distance(transform.position, targetPoint.position) < 0.1f)
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, (elapsedTime / duration));
-                elapsedTime += Time.deltaTime;
-                yield return null; // Ждем следующего кадра
-            }
+                _currentPointIndex++; // Переходим к следующей точке
 
-            transform.rotation = targetRotation;
+                // Если достигли последней точки, вызываем событие завершения игры
+                if (_currentPointIndex >= _pivotPoints.Count)
+                {
+                    OnGameEnd();
+                }
+            }
         }
 
-        public void SetTurnPosition(Vector3 position)
+        private void OnGameEnd()
         {
-            Debug.Log("Setting turn position: " + position);
-            _targetPosition = position;
-        }
-
-        private void OnDestroy()
-        {
-            if (_inputService != null)
-            {
-                _inputService.OnDrag -= HandleDrag;
-            }
+            Debug.Log("Game Over: All points reached");
+            // Здесь можно вызвать событие окончания игры
         }
     }
 }

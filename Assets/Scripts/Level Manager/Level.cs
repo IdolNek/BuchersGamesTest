@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using CodeBase.GamePlay.Levels;
 using UnityEngine;
 
 namespace ButchersGames
@@ -5,8 +7,11 @@ namespace ButchersGames
     public class Level : MonoBehaviour
     {
         [SerializeField] private Transform playerSpawnPoint;
+        [SerializeField] private List<PivotPoint> pivotPoints; // <PivotPoint>
 
         public Transform PlayerSpawnPoint => playerSpawnPoint;
+
+        public List<PivotPoint> PivotPoints => pivotPoints;
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()

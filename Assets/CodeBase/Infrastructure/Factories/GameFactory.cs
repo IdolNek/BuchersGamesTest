@@ -13,6 +13,7 @@ namespace CodeBase.Infrastructure.Factories
         private readonly LevelManager.Factory _levelManagerFactory;
         
         private Player _player;
+        private LevelManager _LevelManager;
 
         public GameFactory(DiContainer container, HUDRoot.Factory hudFactory, LevelManager.Factory levelManagerFactory)
         {
@@ -23,11 +24,17 @@ namespace CodeBase.Infrastructure.Factories
 
         public IHUDRoot CreateHUD() => _hudFactory.Create();
         
-        public LevelManager CreateLevelManager() => _levelManagerFactory.Create();
+        public LevelManager CreateLevelManager()
+        {
+            _LevelManager = _levelManagerFactory.Create();
+            return _LevelManager;
+        }
+
         public void CreatePlayer(Vector3 position)
         {
            var player = _container.InstantiatePrefabResource(InfrastructureAssetPath.Player, position, Quaternion.identity, null);
            _player = player.GetComponent<Player>();
+           _player.GetComponent<PlayerMovement>().Initialize(_LevelManager.Levels[_LevelManager.CurrentLevelIndex].PivotPoints);
         }
 
         public void Cleanup()
