@@ -1,27 +1,32 @@
-using System.Collections;
 using System.Collections.Generic;
 using CodeBase.GamePlay.Levels;
-using CodeBase.Services.InputService;
 using UnityEngine;
-using Zenject;
 
 namespace CodeBase.GamePlay.Player
 {
     public class PlayerMovement : MonoBehaviour
     {
-        public float speed = 5f; // Скорость движения вперед
-        public float rotationSpeed = 180f; // Скорость поворота
-        private int _currentPointIndex = 0; // Текущая точка, к которой движется игрок
+        [SerializeField] private PlayerView _playerView;
+        public float speed = 5f;
+        public float rotationSpeed = 180f;
+        private int _currentPointIndex = 0;
 
-        private List<PivotPoint> _pivotPoints; // Список точек, по которым будет двигаться игрок
+        private List<PivotPoint> _pivotPoints;
+        private bool _isStop;
 
         public void Initialize(List<PivotPoint> pivotPoints)
         {
             _pivotPoints = pivotPoints;
         }
 
+        public void SetStop() => _isStop = true;
+
+        public void SetStart() => _isStop = false;
+
         private void Update()
         {
+            if(_isStop) return;
+            
             if (_pivotPoints == null || _pivotPoints.Count == 0 || _currentPointIndex >= _pivotPoints.Count)
                 return;
 
@@ -30,23 +35,21 @@ namespace CodeBase.GamePlay.Player
 
         private void MoveTowardsPoint()
         {
-            // Берем текущую точку назначения
             Transform targetPoint = _pivotPoints[_currentPointIndex].transform;
 
-            // Двигаем игрока к точке
-            Vector3 direction = (targetPoint.position - transform.position).normalized;
-            transform.position += direction * speed * Time.deltaTime;
+            Vector3 direction = (targetPoint.position - transform.position);
 
-            // Вращаем игрока в сторону точки
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            Vector3 normalizedDirection = direction.normalized;
+
+            transform.position += normalizedDirection * speed * Time.deltaTime;
+
+            Quaternion targetRotation = Quaternion.LookRotation(normalizedDirection);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
-            // Проверяем, достиг ли игрок точки
-            if (Vector3.Distance(transform.position, targetPoint.position) < 0.1f)
+            if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(targetPoint.position.x, 0, targetPoint.position.z)) < 0.1f)
             {
-                _currentPointIndex++; // Переходим к следующей точке
+                _currentPointIndex++;
 
-                // Если достигли последней точки, вызываем событие завершения игры
                 if (_currentPointIndex >= _pivotPoints.Count)
                 {
                     OnGameEnd();
@@ -56,8 +59,7 @@ namespace CodeBase.GamePlay.Player
 
         private void OnGameEnd()
         {
-            Debug.Log("Game Over: All points reached");
-            // Здесь можно вызвать событие окончания игры
+            _playerView.Dance();
         }
     }
 }

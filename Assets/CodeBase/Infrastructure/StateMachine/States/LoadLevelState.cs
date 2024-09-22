@@ -1,4 +1,5 @@
 ﻿using ButchersGames;
+using CodeBase.GamePlay.Player;
 using CodeBase.Infrastructure.Factories;
 using CodeBase.Infrastructure.States;
 using CodeBase.UI.HUD;
@@ -42,6 +43,7 @@ namespace CodeBase.Infrastructure.StateMachine.States
             _levelManager.NextLevel();
 
             _gameFactory.CreatePlayer(_levelManager.Levels[_levelManager.CurrentLevelIndex].PlayerSpawnPoint.position);
+            _gameFactory.Player.GetComponent<PlayerMovement>().SetStop();
             
             if (_levelManager.CurrentLevelIndex == 0)
             {
