@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CodeBase.GamePlay.Player
 {
-    public class PlayerTrigger : MonoBehaviour
+    public class PlayerMarker: MonoBehaviour
     {
         
     }

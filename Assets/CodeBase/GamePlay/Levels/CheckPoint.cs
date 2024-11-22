@@ -9,7 +9,7 @@ namespace CodeBase.GamePlay.Levels
         [SerializeField] private List<Flag> _flags;
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent<PlayerTrigger>(out var playerTrigger))
+            if (other.TryGetComponent<TriggerHandler>(out var playerTrigger))
             {
                 foreach (var flag in _flags)
                 {

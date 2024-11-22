@@ -43,7 +43,7 @@ namespace CodeBase.Infrastructure.StateMachine.States
             _levelManager.NextLevel();
 
             _gameFactory.CreatePlayer(_levelManager.Levels[_levelManager.CurrentLevelIndex].PlayerSpawnPoint.position);
-            _gameFactory.Player.GetComponent<PlayerMovement>().SetStop();
+            _gameFactory.PlayerMarker.GetComponent<PlayerMovement>().SetStop();
             
             if (_levelManager.CurrentLevelIndex == 0)
             {

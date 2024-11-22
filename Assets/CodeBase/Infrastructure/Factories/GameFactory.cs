@@ -12,10 +12,10 @@ namespace CodeBase.Infrastructure.Factories
         private readonly HUDRoot.Factory _hudFactory;
         private readonly LevelManager.Factory _levelManagerFactory;
         
-        private PlayerTrigger _playerTrigger;
+        private PlayerMarker _playerMarker;
         private LevelManager _LevelManager;
 
-        public PlayerTrigger Player => _playerTrigger;
+        public PlayerMarker PlayerMarker => _playerMarker;
 
         public GameFactory(DiContainer container, HUDRoot.Factory hudFactory, LevelManager.Factory levelManagerFactory)
         {
@@ -35,8 +35,8 @@ namespace CodeBase.Infrastructure.Factories
         public void CreatePlayer(Vector3 position)
         {
            var player = _container.InstantiatePrefabResource(InfrastructureAssetPath.Player, position, Quaternion.identity, null);
-           _playerTrigger = player.GetComponent<PlayerTrigger>();
-           Player.GetComponent<PlayerMovement>().Initialize(_LevelManager.Levels[_LevelManager.CurrentLevelIndex].PivotPoints);
+           _playerMarker = player.GetComponent<PlayerMarker>();
+           player.GetComponent<PlayerMovement>().Initialize(_LevelManager.Levels[_LevelManager.CurrentLevelIndex].PivotPoints);
         }
 
         public void Cleanup()

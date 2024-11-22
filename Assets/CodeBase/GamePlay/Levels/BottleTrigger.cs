@@ -7,9 +7,9 @@ namespace CodeBase.GamePlay.Levels
     {
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent<PlayerProgress>(out var playerProgress))
+            if (other.TryGetComponent<TriggerHandler>(out var trigger))
             {
-                playerProgress.RemoveMoney();
+                trigger.Progress.RemoveMoney();
                 Destroy(gameObject);
             }
         }

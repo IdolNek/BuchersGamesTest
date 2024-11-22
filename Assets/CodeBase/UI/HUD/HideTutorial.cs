@@ -18,8 +18,8 @@ namespace CodeBase.UI.HUD
 
         private void OnDrag(float obj)
         {
-            _gameFactory.Player.GetComponent<PlayerMovement>().SetStart();
-            _gameFactory.Player.GetComponent<PlayerView>().SetPoor();
+            _gameFactory.PlayerMarker.GetComponent<PlayerMovement>().SetStart();
+            _gameFactory.PlayerMarker.GetComponent<PlayerView>().SetPoor();
             gameObject.SetActive(false);
         }
 

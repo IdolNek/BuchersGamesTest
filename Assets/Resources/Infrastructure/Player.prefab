@@ -1015,6 +1015,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4280831468966701677}
+  - component: {fileID: 5570188714905194719}
   - component: {fileID: 7491166709674948479}
   - component: {fileID: 4044825329765860113}
   - component: {fileID: 1032070691045239039}
@@ -1045,6 +1046,18 @@ Transform:
   - {fileID: 4276820610484235795}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5570188714905194719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2703888590892924306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69e4ee2f668a4d2bbbeba2b1b809f85e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!82 &7491166709674948479
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2099,7 +2112,7 @@ GameObject:
   m_Layer: 0
   m_Name: Left edge
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -2916,7 +2929,7 @@ GameObject:
   - component: {fileID: 1161939189910526642}
   - component: {fileID: 9114573132498933857}
   - component: {fileID: 5510837058227860208}
-  - component: {fileID: 502552400285177911}
+  - component: {fileID: 3611351557266147518}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -3017,7 +3030,7 @@ CapsuleCollider:
   m_Height: 1.4749395
   m_Direction: 1
   m_Center: {x: 0, y: 0.76253027, z: 0}
---- !u!114 &502552400285177911
+--- !u!114 &3611351557266147518
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3026,9 +3039,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6604981361691678879}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19487fa007ae43bfa468a60f6e86e109, type: 3}
+  m_Script: {fileID: 11500000, guid: 8932e8817f9a4f5db07f2412e825d19a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerProgress: {fileID: 6530953086757828723}
 --- !u!1 &6638890580168778660
 GameObject:
   m_ObjectHideFlags: 0
@@ -3934,7 +3948,7 @@ GameObject:
   m_Layer: 0
   m_Name: Right edge
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1

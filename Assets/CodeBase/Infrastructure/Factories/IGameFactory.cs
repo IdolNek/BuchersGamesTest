@@ -11,6 +11,6 @@ namespace CodeBase.Infrastructure.Factories
         void Cleanup();
         LevelManager CreateLevelManager();
         void CreatePlayer(Vector3 position);
-        PlayerTrigger Player { get; }
+        PlayerMarker PlayerMarker { get; }
     }
 }

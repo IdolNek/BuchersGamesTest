@@ -10,13 +10,13 @@ namespace CodeBase.GamePlay.Levels
         [SerializeField] private int _multiplier = 2;
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent<PlayerProgress>(out var playerProgress))
+            if (other.TryGetComponent<TriggerHandler>(out var trigger))
             {
                 foreach (var door in _doors)
                 {
                     door.Open();
                 }
-                playerProgress.SetMultiplier(_multiplier);
+                trigger.Progress.SetMultiplier(_multiplier);
             }
         }
     }
